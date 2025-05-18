@@ -1,7 +1,7 @@
     <!-- Top Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#"><img src="http://localhost/bartabase/assets/images/bartabase-logo.png" class="top-logo"></a>
+            <a class="navbar-brand" href="http://localhost/bartabase/"><img src="http://localhost/bartabase/assets/images/bartabase-logo.png" class="top-logo"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="modal" data-bs-target="#menuModal">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -83,7 +83,7 @@
 <a class="dropdown-item top-signin-btn" href="#" data-auth-trigger>Sign in</a>
 <div class="new-customer-link">
   New customer? <a href="#" data-auth-trigger>Create account here.</a>
-</div>
+</div> 
 
 <!-- Bartabase Auth Modal -->
 <div id="bartabase-auth-modal" class="bartabase-modal">
@@ -95,73 +95,10 @@
     <button class="auth-btn social apple"><i class="fa-brands fa-apple"></i> Continue with Apple</button>
     <div style="text-align: center; margin: 20px 0;">
         <p>Register with <a href="#" class="email-link">Email</a></p>
-        <p>Already have an account? <a href="#" id="loginTrigger">Log in</a></p>
+        <p>Already have an account? <a href="http://localhost/bartabase/login.php">Log in</a></p>
     </div>
   </div>
 </div>
-
-<!-- Login Modal -->
-<div id="bartabase-login-modal" class="bartabase-modal">
-  <div class="bartabase-modal-content small">
-    <span class="bartabase-modal-close login-close">&times;</span>
-    <h2 style="text-align: center;">Log in</h2>
-
-    <input type="text" id="loginEmail" placeholder="Email or username">
-    <div class="password-wrap">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <span class="toggle-password" id="toggleLoginPassword">👁</span>
-    </div>
-
-    <button class="auth-btn continue">Continue</button>
-
-    <p class="help-link"><a href="#">Forgot your password?</a></p>
-    <p class="help-link"><a href="#">Having trouble?</a></p>
-  </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const loginModal = document.getElementById('bartabase-login-modal');
-
-    // Event delegation for login trigger and closing modal
-    document.body.addEventListener('click', function (e) {
-        const loginTrigger = e.target.closest('#loginTrigger');
-        const closeBtn = e.target.closest('.login-close');
-
-        if (loginTrigger) {
-        e.preventDefault();
-        document.querySelectorAll('.bartabase-modal').forEach(m => m.classList.remove('active'));
-        loginModal?.classList.add('active');
-        }
-
-        if (closeBtn && loginModal?.classList.contains('active')) {
-        loginModal.classList.remove('active');
-        }
-
-        if (
-        loginModal?.classList.contains('active') &&
-        !loginModal.querySelector('.bartabase-modal-content').contains(e.target) &&
-        e.target !== loginModal
-        ) {
-        loginModal.classList.remove('active');
-        }
-    });
-
-    // Toggle password visibility safely
-    const togglePassword = document.getElementById('toggleLoginPassword');
-    const pwField = document.getElementById('loginPassword');
-
-    if (togglePassword && pwField) {
-        togglePassword.addEventListener('click', function () {
-        const isHidden = pwField.type === 'password';
-        pwField.type = isHidden ? 'text' : 'password';
-        this.textContent = isHidden ? '🙈' : '👁';
-        });
-    }
-    });
-
-</script>
-
 
 <!-- Sign up with Email Modal -->
 <div id="bartabase-email-modal" class="bartabase-modal">

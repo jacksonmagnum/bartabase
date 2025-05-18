@@ -163,6 +163,24 @@
   });
 </script>
 
+<!--login form-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleIcon = document.getElementById('toggleLoginPassword');
+            const passwordInput = document.getElementById('loginPassword');
+
+            if (toggleIcon && passwordInput) {
+            toggleIcon.addEventListener('click', function () {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            } else {
+            console.warn('Toggle or password field not found');
+            }
+        });
+    </script>
 
 
 <!-- Footer -->

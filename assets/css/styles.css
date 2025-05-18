@@ -1076,7 +1076,7 @@ label.error-text {
 
 p.help-link {
   font-size: 12px;
-  color: #007bff;
+  color: #f88909;
   text-align: center !important;
   margin-top: 10px;
 }
@@ -1135,7 +1135,7 @@ p.help-link {
 }
 
 .terms-checkbox a {
-  color: #007bff;
+  color: #f88909;
   text-decoration: none;
 }
 
@@ -1193,7 +1193,7 @@ input[type="text"], input[type="password"] {
 
 .auth-btn.continue {
   width: 100%;
-  background-color: teal;
+  background-color: #052d39;
   color: white;
   border: none;
   padding: 0.75rem;
@@ -1209,6 +1209,75 @@ input[type="text"], input[type="password"] {
 }
 
 .help-link a {
-  color: teal;
+  color: #f88909;
   text-decoration: none;
 }
+
+    .login-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      margin: 10% auto;
+    }
+
+    .login-card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .login-card input[type="text"],
+    .login-card input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 1.5rem;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #666;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background-color: #052d39;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .login-card .help-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .login-card .help-link a {
+      color: #f88909;
+      text-decoration: none;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .login-card .help-link a:hover {
+      text-decoration: underline;
+    }
