@@ -72,10 +72,9 @@
 
 <!--Toggle and form validation-->
 <script>
-
   const signupBtn = document.getElementById("signupBtn");
 
-  signupBtn.addEventListener("click", function (e) {
+  signupBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     const fields = [
@@ -130,9 +129,32 @@
       termsError.textContent = "";
     }
 
-    if (isValid) {
-      alert("Form submitted successfully!");
-      // Handle actual submission
+    if (!isValid) return;
+
+    const payload = {
+      name: document.getElementById('fullName').value.trim(),
+      username: document.getElementById('username').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('passwordField').value,
+      agree_terms: document.getElementById('termsCheckbox').checked
+    };
+
+    try {
+      const response = await fetch('signup.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.redirect) {
+        window.location.href = result.redirect;
+      } else {
+        alert(result.message || result.error);
+      }
+    } catch (err) {
+      alert("An error occurred while signing up. Please try again.");
     }
   });
 
@@ -148,6 +170,7 @@
     });
   });
 </script>
+
 
 
 <!--Auto-reset label when the user starts typing-->

@@ -104,40 +104,42 @@
 <div id="bartabase-email-modal" class="bartabase-modal">
   <div class="bartabase-modal-content large">
     <span class="bartabase-modal-close email-close">&times;</span>
-    <h2 style="text-align: center">Sign up with email</h2>
+    <form id="signupForm" method="POST" action="http://localhost/bartabase/signup.php">
+        <h2 style="text-align: center">Sign up with email</h2>
 
-    <input type="text" id="fullName" placeholder="Full name">
-    <label id="fullNameLabel" data-default="Your full name will not be publicly visible.">Your full name will not be publicly visible.</label>
+        <input type="text" id="fullName" placeholder="Full name">
+        <label id="fullNameLabel" data-default="Your full name will not be publicly visible.">Your full name will not be publicly visible.</label>
 
-    <input type="text" id="username" placeholder="Username">
-    <label id="usernameLabel" data-default="Only use letters and numbers. Usernames can’t be changed later.">Only use letters and numbers. Usernames can’t be changed later.</label>
+        <input type="text" id="username" placeholder="Username">
+        <label id="usernameLabel" data-default="Only use letters and numbers. Usernames can’t be changed later.">Only use letters and numbers. Usernames can’t be changed later.</label>
 
-    <input type="email" id="email" placeholder="Email">
-    <label id="emailLabel" data-default="Enter the email you want to use on Bartabase.">Enter the email you want to use on Bartabase.</label>
+        <input type="email" id="email" placeholder="Email">
+        <label id="emailLabel" data-default="Enter the email you want to use on Bartabase.">Enter the email you want to use on Bartabase.</label>
 
-    <div class="password-wrap">
-      <input type="password" id="passwordField" placeholder="Password">
-      <span class="toggle-password" id="togglePassword">&#128065;</span>
-    </div>
-    <label id="passwordLabel" data-default="At least 7 characters, including at least 1 letter and 1 number.">At least 7 characters, including at least 1 letter and 1 number.</label>
+        <div class="password-wrap">
+        <input type="password" id="passwordField" placeholder="Password">
+        <span class="toggle-password" id="togglePassword">&#128065;</span>
+        </div>
+        <label id="passwordLabel" data-default="At least 7 characters, including at least 1 letter and 1 number.">At least 7 characters, including at least 1 letter and 1 number.</label>
 
-    <div class="checkbox-group">
-      <label>
-        <input type="checkbox" id="offersCheckbox">
-        I’d like to receive personalized offers and updates via email.
-      </label>
-      <label>
-        <input type="checkbox" id="termsCheckbox">
-          <span>
-            I agree to Bartabase’s
-            <a href="#">Terms & Conditions</a> and 
-            <a href="#">Privacy Policy</a>.
-        </span>
-      </label>
-    </div>
-    <span id="termsError" class="error-message"></span>
+        <div class="checkbox-group">
+        <label>
+            <input type="checkbox" id="offersCheckbox">
+            I’d like to receive personalized offers and updates via email.
+        </label>
+        <label>
+            <input type="checkbox" id="termsCheckbox">
+            <span>
+                I agree to Bartabase’s
+                <a href="#">Terms & Conditions</a> and 
+                <a href="#">Privacy Policy</a>.
+            </span>
+        </label>
+        </div>
+        <span id="termsError" class="error-message"></span>
 
-    <button class="auth-btn continue" id="signupBtn">Continue</button>
+        <button class="auth-btn continue" id="signupBtn">Continue</button>
+        </form>
     <p class="help-link"><a href="#">Having trouble?</a></p>
   </div>
 </div>
