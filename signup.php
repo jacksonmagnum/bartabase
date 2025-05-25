@@ -106,6 +106,8 @@ try {
 
     $mail->send();
 
+    session_start();
+    $_SESSION['allow_confirm_page'] = true;
     echo json_encode([
         'success' => true,
         'message' => 'Signup successful! Check your email to verify your account.',

@@ -40,5 +40,6 @@ $pdo->prepare("UPDATE users SET is_verified = 1 WHERE id = ?")->execute([$user_i
 $pdo->prepare("DELETE FROM email_verifications WHERE token = ?")->execute([$token]);
 
 // Redirect to thank you page or show message
+$_SESSION['allow_thankyou_page'] = true;
 header("Location: thank-you.php");
 exit;

@@ -207,7 +207,7 @@
 
 
 <!-- Footer -->
-<footer class="mt-4">
+<footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-6">

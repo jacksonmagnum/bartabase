@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['allow_confirm_page'])) {
+    header('Location: index.php'); // Redirect to home or error
+    exit;
+}
+
+// Optionally clear the flag after loading
+unset($_SESSION['allow_confirm_page']);
+?>
+
+
 <!-- confirm-email.php -->
 <!DOCTYPE html>
 <html lang="en">

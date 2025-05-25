@@ -351,7 +351,7 @@
             </div>
 
             <!--Load More Button -->
-            <div class="text-center mt-4" id="load-more-wrapper">
+            <div class="text-center my-4" id="load-more-wrapper">
                 <button id="load-more-btn" class="see-more-btn">See More</button>
             </div>
 
