@@ -1,13 +1,26 @@
 <?php
+ob_start(); // Buffer output to prevent accidental whitespace/errors
+
 require __DIR__ . '/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 
-// Load environment variables
+// Load .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+// Validate critical environment variables
+$requiredEnv = ['GMAIL_USERNAME', 'GMAIL_APP_PASSWORD', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME'];
+foreach ($requiredEnv as $key) {
+    if (empty($_ENV[$key])) {
+        http_response_code(500);
+        echo json_encode(['error' => "Missing required environment variable: $key"]);
+        ob_end_flush();
+        exit;
+    }
+}
 
 header('Content-Type: application/json');
 
@@ -25,6 +38,7 @@ try {
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database connection failed']);
+    ob_end_flush();
     exit;
 }
 
@@ -39,12 +53,14 @@ $agree_terms = $data['agree_terms'] ?? false;
 if (!$name || !$username || !$email || !$password || !$agree_terms) {
     http_response_code(400);
     echo json_encode(['error' => 'All fields are required and must be valid']);
+    ob_end_flush();
     exit;
 }
 
 if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d).{7,}$/', $password)) {
     http_response_code(422);
     echo json_encode(['error' => 'Password must be at least 7 characters with letters and numbers']);
+    ob_end_flush();
     exit;
 }
 
@@ -65,10 +81,11 @@ try {
 } catch (PDOException $e) {
     http_response_code(409);
     echo json_encode(['error' => 'User already exists or DB error']);
+    ob_end_flush();
     exit;
 }
 
-// Send email
+// Send verification email
 $mail = new PHPMailer(true);
 try {
     $mail->isSMTP();
@@ -97,5 +114,9 @@ try {
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Failed to send verification email: ' . $mail->ErrorInfo]);
+
+    // Optionally log the error
+    // file_put_contents('mail_error.log', $mail->ErrorInfo);
 }
 
+ob_end_flush(); // Clean buffer and send output
