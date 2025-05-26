@@ -1,4 +1,27 @@
-    <!-- Top Navigation Bar -->
+<?php
+    session_start();
+
+    $userLoggedIn = false;
+    $username = '';
+
+    if (isset($_SESSION['user_id'])) {
+        // Connect to DB
+        $pdo = new PDO("mysql:host=localhost;dbname=bartabase;charset=utf8mb4", "root", "", [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+
+        $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $username = htmlspecialchars($user['username']);
+            $userLoggedIn = true;
+        }
+    }
+?>
+
+<!-- Top Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="http://localhost/bartabase/"><img src="http://localhost/bartabase/assets/images/bartabase-logo.png" class="top-logo"></a>
@@ -15,19 +38,26 @@
                     <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                 </ul>
             </div>
+
             <div class="dropdown d-none d-lg-block">
                 <button class="btn btn-primary dropdown-toggle signin-button text-start" type="button" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <div>
-                        <div class="signin-hello-text">Hello, sign in</div>
+                        <div class="signin-hello-text">
+                            <?= $userLoggedIn ? "Hello, $username" : "Hello, sign in" ?>
+                        </div>
                         <div class="accounts-text">Accounts & Lists</div>
                     </div>
                 </button>
+
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown" style="padding:10px;">
-                    <li>
-                        <a class="dropdown-item top-signin-btn" href="#" data-auth-trigger>Sign in</a>
-                        <div class="new-customer-link">New customer? <a href="#" data-auth-trigger>Create account here.</a></div>
-                    </li>
-                    <hr>
+                    <?php if (!$userLoggedIn): ?>
+                        <li>
+                            <a class="dropdown-item top-signin-btn" href="#" data-auth-trigger>Sign in</a>
+                            <div class="new-customer-link">New customer? <a href="#" data-auth-trigger>Create account here.</a></div>
+                        </li>
+                        <hr>
+                    <?php endif; ?>
+
                     <li>
                         <div class="account-list">
                             <h6 style="font-weight: bold; text-align: center;">Your Account</h6>
@@ -37,8 +67,18 @@
                             <a href="#">Recommendations</a>
                         </div>
                     </li>
+
+                    <?php if ($userLoggedIn): ?>
+                        <hr>
+                        <li>
+                            <form action="http://localhost/bartabase/logout.php" method="POST">
+                                <button type="submit" class="dropdown-item top-signin-btn">Sign out</button>
+                            </form>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
+
         </div>
     </nav>
 

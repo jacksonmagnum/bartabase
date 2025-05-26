@@ -29,22 +29,28 @@
     <div class="container mt-5" style="height: 100vh;">
         <div class="row">
             <div class="col-md-6 mx-auto">
-                <div class="login-card">
-                    <h2>Log in</h2>
-                    <input type="text" placeholder="Email or username" id="loginEmail" />
 
-                    <div class="password-wrap">
-                        <input type="password" placeholder="Password" id="loginPassword" />
-                        <i class="fa-solid fa-eye toggle-password" id="toggleLoginPassword"></i>
+                    <div class="login-card p-4 border rounded shadow">
+
+                        <!-- Alert container -->
+                        <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                        <h2>Log in</h2>
+                        <input type="text" placeholder="Email or username" id="loginEmail" />
+
+                        <div class="password-wrap">
+                            <input type="password" placeholder="Password" id="loginPassword" />
+                            <i class="fa-solid fa-eye toggle-password" id="toggleLoginPassword"></i>
+                        </div>
+
+                        <button onclick="loginUser()">Continue</button>
+
+                        <div class="help-link">
+                            <a href="#">Forgot your password?</a>
+                            <a href="#">Having trouble?</a>
+                        </div>
                     </div>
 
-                    <button>Continue</button>
-
-                    <div class="help-link">
-                        <a href="#">Forgot your password?</a>
-                        <a href="#">Having trouble?</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -60,29 +66,52 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 
-    <!--Load More JS -->
     <script>
-        const loadMoreBtn = document.getElementById('load-more-btn');
-        const loadCount = 4; // Number of items to show per click
+        function loginUser() {
+            const identifier = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const alertBox = document.getElementById('loginAlert');
 
-        loadMoreBtn.addEventListener('click', () => {
-            const hiddenItems = document.querySelectorAll('.more-products.d-none');
-            let shown = 0;
+            alertBox.classList.add('d-none');
+            alertBox.innerHTML = '';
 
-            hiddenItems.forEach((item) => {
-            if (shown < loadCount) {
-                item.classList.remove('d-none');
-                item.classList.add('fade-in');
-                shown++;
+            if (!identifier || !password) {
+                alertBox.textContent = "Please enter both username and password.";
+                alertBox.classList.remove('d-none');
+                return;
             }
+
+            fetch('login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifier, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.php';
+                } else {
+                    if (data.error === 'user_not_found') {
+                        alertBox.innerHTML = `Login Error: User Does Not Exist! Please <a href="#" onclick="triggerSignupModal()">create an account here</a>.`;
+                    } else {
+                        alertBox.textContent = "Username or Password is incorrect!";
+                    }
+                    alertBox.classList.remove('d-none');
+                }
+            })
+            .catch(() => {
+                alertBox.textContent = "Something went wrong. Please try again.";
+                alertBox.classList.remove('d-none');
             });
+        }
 
-            // Hide button if no more items left to show
-            if (document.querySelectorAll('.more-products.d-none').length === 0) {
-            document.getElementById('load-more-wrapper').classList.add('d-none');
-            }
-        });
+        // Trigger signup modal
+        function triggerSignupModal() {
+            const signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+            signupModal.show();
+        }
     </script>
 
+  
 </body>
 </html>

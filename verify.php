@@ -1,5 +1,6 @@
 <?php
 // verify.php
+session_start();
 
 require __DIR__ . '/vendor/autoload.php';
 header('Content-Type: text/html; charset=UTF-8');
