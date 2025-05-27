@@ -33,7 +33,7 @@
                     <div class="login-card p-4 border rounded shadow">
 
                         <!-- Alert container -->
-                        <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+                        <div id="login-error" class="alert alert-danger d-none" role="alert"></div>
 
                         <h2>Log in</h2>
                         <input type="text" placeholder="Email or username" id="loginEmail" />
@@ -43,7 +43,11 @@
                             <i class="fa-solid fa-eye toggle-password" id="toggleLoginPassword"></i>
                         </div>
 
-                        <button onclick="loginUser()">Continue</button>
+                        <button id="loginButton" onclick="loginUser()">
+                            <span id="loginBtnText">Continue</span>
+                            <span id="loginSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        </button>
+
 
                         <div class="help-link">
                             <a href="#">Forgot your password?</a>
@@ -67,50 +71,67 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <script>
-        function loginUser() {
+        document.addEventListener('DOMContentLoaded', () => {
+        window.loginUser = function () {
             const identifier = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const alertBox = document.getElementById('loginAlert');
+            const errorContainer = document.getElementById('login-error');
+            const loginBtn = document.getElementById('loginButton');
+            const loginText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
 
-            alertBox.classList.add('d-none');
-            alertBox.innerHTML = '';
+            errorContainer.innerHTML = '';
+            errorContainer.classList.add('d-none');
 
-            if (!identifier || !password) {
-                alertBox.textContent = "Please enter both username and password.";
-                alertBox.classList.remove('d-none');
-                return;
-            }
+            loginBtn.disabled = true;
+            loginSpinner.classList.remove('d-none');
+            loginText.textContent = 'Signing in...';
 
-            fetch('login.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ identifier, password })
+            fetch('loginuser.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier, password })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = 'index.php';
+            .then(res => res.json().then(data => ({ status: res.status, body: data })))
+            .then(({ status, body }) => {
+            loginBtn.disabled = false;
+            loginSpinner.classList.add('d-none');
+            loginText.textContent = 'Continue';
+
+            if (status === 200 && body.success) {
+                window.location.href = 'index.php'; // Redirect instead of reload
+                //location.reload();
+            } else {
+                errorContainer.classList.remove('d-none');
+                if (body.error_code === 'user_not_found') {
+                errorContainer.innerHTML = `Login Error: User Does Not Exist! <a href="#" onclick="openSignupModal()">Create an account here</a>.`;
                 } else {
-                    if (data.error === 'user_not_found') {
-                        alertBox.innerHTML = `Login Error: User Does Not Exist! Please <a href="#" onclick="triggerSignupModal()">create an account here</a>.`;
-                    } else {
-                        alertBox.textContent = "Username or Password is incorrect!";
-                    }
-                    alertBox.classList.remove('d-none');
+                errorContainer.textContent = body.error || 'Login failed';
                 }
+            }
             })
-            .catch(() => {
-                alertBox.textContent = "Something went wrong. Please try again.";
-                alertBox.classList.remove('d-none');
+            .catch((err) => {
+            loginBtn.disabled = false;
+            loginSpinner.classList.add('d-none');
+            loginText.textContent = 'Continue';
+            errorContainer.classList.remove('d-none');
+            errorContainer.textContent = 'An error occurred. Please try again.';
+            console.error("Fetch Error:", err); // log the actual error
             });
-        }
+        };
+        });
+    </script>
 
-        // Trigger signup modal
-        function triggerSignupModal() {
-            const signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
-            signupModal.show();
+    <script>
+        function openSignupModal() {
+            const signupModal = document.getElementById('bartabase-auth-modal');
+            if (signupModal) {
+            signupModal.style.display = 'block'; // or use Bootstrap/modal logic if applicable
+            }
         }
     </script>
+
+
 
   
 </body>

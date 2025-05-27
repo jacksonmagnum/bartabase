@@ -13,7 +13,11 @@ try {
     ]);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'db_connection_failed']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Database connection failed.',
+        'error_code' => 'db_connection_failed'
+    ]);
     exit;
 }
 
@@ -24,7 +28,11 @@ $password = $data['password'] ?? '';
 
 if (!$identifier || !$password) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'missing_fields']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Both email/username and password are required.',
+        'error_code' => 'missing_fields'
+    ]);
     exit;
 }
 
@@ -36,21 +44,33 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // User not found
 if (!$user) {
     http_response_code(404);
-    echo json_encode(['success' => false, 'error' => 'user_not_found']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Login Error: User Does Not Exist! Create an account here.',
+        'error_code' => 'user_not_found'
+    ]);
     exit;
 }
 
 // Wrong password
 if (!password_verify($password, $user['password'])) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'wrong_password']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Username or Password is incorrect!',
+        'error_code' => 'invalid_credentials'
+    ]);
     exit;
 }
 
 // Not verified
 if (!$user['is_verified']) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'error' => 'not_verified']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Please verify your email before logging in.',
+        'error_code' => 'not_verified'
+    ]);
     exit;
 }
 
